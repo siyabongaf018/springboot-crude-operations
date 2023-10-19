@@ -1,6 +1,5 @@
 package com.example.EmployeeManagmentSystembackend.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,13 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeDto {
+public class DepartmentDto {
     //we use this call to transfer data between server and client
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private Long departmentId;
-
-
+    public Long id;
+    public String departmentName;
+    public String departmentDescription;
 }

@@ -27,6 +27,11 @@ public class Employee {
     @Column(name = "email",nullable = false,unique = true)
     private String email;
 
+    //creating a many to one column that will be a foreign key to the employee entity
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    private Department department;
+
 
 
 }
