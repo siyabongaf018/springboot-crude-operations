@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin("*")
 @AllArgsConstructor
 @RestController //this class becomes spring mvc rest controller & it enables it to handle http request
 @RequestMapping("/api/employees") // this defines the base url for all request

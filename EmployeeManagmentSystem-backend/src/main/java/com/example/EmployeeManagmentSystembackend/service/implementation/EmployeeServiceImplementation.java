@@ -1,9 +1,11 @@
 package com.example.EmployeeManagmentSystembackend.service.implementation;
 
 import com.example.EmployeeManagmentSystembackend.dto.EmployeeDto;
+import com.example.EmployeeManagmentSystembackend.entity.Department;
 import com.example.EmployeeManagmentSystembackend.entity.Employee;
 import com.example.EmployeeManagmentSystembackend.exception.ResourceNotFoundException;
 import com.example.EmployeeManagmentSystembackend.mapper.EmployeeMapper;
+import com.example.EmployeeManagmentSystembackend.repository.DepartmentRepository;
 import com.example.EmployeeManagmentSystembackend.repository.EmployeeRepository;
 import com.example.EmployeeManagmentSystembackend.service.EmployeeService;
 import lombok.AllArgsConstructor;
@@ -18,11 +20,16 @@ import java.util.stream.Collectors;
 public class EmployeeServiceImplementation implements EmployeeService {
 
     private EmployeeRepository employeeRepository;
+    private DepartmentRepository departmentRepository;
     @Override
     public EmployeeDto createEmployee(EmployeeDto employeeDto) {
         //convert EmployeeDto into Employee
         Employee employee = EmployeeMapper.mapToEmployee(employeeDto);
 
+        Department department = departmentRepository.findById(employeeDto.getDepartmentId())
+                .orElseThrow(()->
+                        new ResourceNotFoundException("Department does not exist with id:" + employeeDto.getDepartmentId()));
+        employee.setDepartment(department);
         //put the data into the database
         Employee savedEmployee = employeeRepository.save(employee);
 
@@ -34,7 +41,7 @@ public class EmployeeServiceImplementation implements EmployeeService {
     public EmployeeDto getEmployeeById(Long employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(()->
-                        new ResourceNotFoundException("Employee is not exists with given id : "+ employeeId));
+                        new ResourceNotFoundException("Employee does not exists with given id : "+ employeeId));
         return EmployeeMapper.mapToEmployeeDto(employee);
     }
 
@@ -61,6 +68,11 @@ public class EmployeeServiceImplementation implements EmployeeService {
         employee.setFirstName(updatedEmployee.getFirstName());
         employee.setLastName(updatedEmployee.getLastName());
         employee.setEmail(updatedEmployee.getEmail());
+
+        Department department = departmentRepository.findById(updatedEmployee.getDepartmentId())
+                .orElseThrow(()->
+                        new ResourceNotFoundException("Department does not exist with id:" + updatedEmployee.getDepartmentId()));
+        employee.setDepartment(department);
 
         /*save updated data on the database. if the employee has the primary key the save()
         will update the values on the table. if employee does not have the primary key it will
